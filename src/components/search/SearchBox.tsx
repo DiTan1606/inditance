@@ -1,8 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
+import { useDebounce } from '@/lib/hooks/useDebounce'
 
 /* eslint-disable @next/next/no-img-element */
 
@@ -17,21 +18,42 @@ export function SearchBox() {
   const [results, setResults] = useState<ProfileResult[]>([])
   const [loading, setLoading] = useState(false)
   const [searched, setSearched] = useState(false)
+  const debouncedQuery = useDebounce(query, 500)
+
+  useEffect(() => {
+    async function performSearch() {
+      if (!debouncedQuery.trim()) {
+        setResults([])
+        setSearched(false)
+        return
+      }
+
+      setLoading(true)
+      setSearched(true)
+
+      try {
+        const supabase = createClient()
+        const { data } = await supabase
+          .from('profiles')
+          .select('id, username, avatar_url')
+          .ilike('username', `%${debouncedQuery.trim()}%`)
+          .limit(20)
+        
+        setResults(data || [])
+      } catch (error) {
+        console.error('Search error:', error)
+        setResults([])
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    performSearch()
+  }, [debouncedQuery])
 
   async function handleSearch(e: React.FormEvent) {
     e.preventDefault()
-    if (!query.trim()) return
-    setLoading(true)
-    setSearched(true)
-    const supabase = createClient()
-    const term = `%${query.trim()}%`
-    const { data } = await supabase
-      .from('profiles')
-      .select('id, username, avatar_url')
-      .ilike('username', term)
-      .limit(20)
-    setResults(data || [])
-    setLoading(false)
+    // Search is handled by useEffect with debounce
   }
 
   return (
@@ -45,12 +67,6 @@ export function SearchBox() {
           placeholder="Tìm theo tên người dùng..."
           className="w-full px-4 py-2.5 bg-zinc-800 border border-zinc-700 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-600"
         />
-        <button
-          type="submit"
-          className="mt-2 w-full py-2 bg-zinc-700 hover:bg-zinc-600 rounded-lg text-sm font-medium"
-        >
-          Tìm kiếm
-        </button>
       </form>
       {loading && <p className="text-zinc-500 text-sm">Đang tìm...</p>}
       {searched && !loading && (

@@ -3,7 +3,7 @@
 import { useState, useRef } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
-import { validateCaption, validateImageSize } from '@/lib/validation'
+import { validateCaption, validateImageSize, validateImageType } from '@/lib/validation'
 
 export function CreatePostForm() {
   const [caption, setCaption] = useState('')
@@ -17,11 +17,19 @@ export function CreatePostForm() {
   function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
     if (!file) return
+    
+    const typeErr = validateImageType(file.type)
+    if (typeErr) {
+      setError(typeErr)
+      return
+    }
+    
     const sizeErr = validateImageSize(file.size)
     if (sizeErr) {
       setError(sizeErr)
       return
     }
+    
     setError(null)
     setImageFile(file)
     setImagePreview(URL.createObjectURL(file))
