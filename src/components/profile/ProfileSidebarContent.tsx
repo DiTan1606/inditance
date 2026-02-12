@@ -31,7 +31,7 @@ export function ProfileSidebarContent() {
   if (loading) return <div className="text-zinc-500 text-sm">Đang tải...</div>
   if (!profile) return <div className="text-zinc-500 text-sm">Không tìm thấy hồ sơ</div>
 
-  async function handleSave(data: Parameters<ProfileEditForm['props']['onSave']>[0]) {
+  async function handleSave(data: { username: string | null; bio: string | null; dob: string | null; avatar_url?: string | null }) {
     const supabase = createClient()
     const update: Record<string, unknown> = {
       username: data.username,
