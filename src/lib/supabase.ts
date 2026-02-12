@@ -1,3 +1,4 @@
+// Legacy export - use createClient from '@/lib/supabase/client' or '@/lib/supabase/server' instead
 import { createClient } from '@supabase/supabase-js'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!

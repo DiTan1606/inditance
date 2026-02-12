@@ -1,0 +1,3 @@
+-- Enable Realtime for messages table
+-- Run in Supabase SQL Editor or enable in Dashboard: Database > Replication > messages table
+-- ALTER PUBLICATION supabase_realtime ADD TABLE public.messages;

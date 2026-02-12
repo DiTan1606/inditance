@@ -1,36 +1,56 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Inditance - Mạng xã hội
 
-## Getting Started
+Website mạng xã hội với các tính năng: kết bạn, đăng bài, nhắn tin, thông báo.
 
-First, run the development server:
+## Công nghệ
+
+- Next.js 16, React 19, TypeScript
+- TailwindCSS 4
+- Supabase (Auth, Database, Storage, Realtime)
+
+## Cài đặt
+
+1. Clone và cài đặt dependencies:
+```bash
+npm install
+```
+
+2. Tạo file `.env.local`:
+```
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key  # Chỉ cần cho Admin (khóa tài khoản)
+```
+
+3. Chạy migrations trong Supabase SQL Editor:
+   - Mở Supabase Dashboard > SQL Editor
+   - Chạy lần lượt các file trong `supabase/migrations/`
+
+4. Tạo Storage buckets trong Supabase Dashboard > Storage:
+   - `avatars` (public)
+   - `posts` (public)
+
+5. Bật Realtime cho bảng `messages`: Database > Replication > chọn `messages`
+
+6. Tạo tài khoản admin: Cập nhật role trong bảng `profiles` thành `admin` cho user cần làm admin
+
+## Chạy dev
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Mở [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Tính năng
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Đăng ký, đăng nhập
+- Hồ sơ cá nhân (avatar, username, bio, ngày sinh)
+- Kết bạn, huỷ kết bạn
+- Đăng bài (ảnh + caption)
+- Bảng tin (bài của bạn bè)
+- Like, bình luận
+- Nhắn tin 1-1 (realtime)
+- Thông báo (like, comment, friend request)
+- Tìm kiếm người dùng
+- Admin: quản lý user, xem bài viết, khóa/mở tài khoản

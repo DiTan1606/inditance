@@ -1,0 +1,5 @@
+@import "tailwindcss";
+
+.font-logo {
+  font-family: 'Lobster', cursive;
+}
