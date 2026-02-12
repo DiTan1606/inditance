@@ -17,7 +17,7 @@ export function ProfileView({ profile, currentUserId }: ProfileViewProps) {
 
   const isOwnProfile = currentProfile.id === currentUserId
 
-  async function handleSave(data: { username?: string | null; bio?: string | null; dob?: string | null; avatar_url?: string | null }) {
+  async function handleSave(data: { username: string | null; bio: string | null; dob: string | null; avatar_url?: string | null }) {
     const supabase = createClient()
     const update: Record<string, unknown> = {
       username: data.username,
